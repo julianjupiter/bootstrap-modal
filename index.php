@@ -1,3 +1,6 @@
+<?php
+include_once 'list.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -32,15 +35,17 @@
 							</tr>
 						</thead>
 						<tbody>
+						<?php foreach($thesisList as $thesis): ?>
 							<tr>
-								<td>1</td>
-								<td>SIS</td>
-								<td>Juan dela Cruz</td>
+								<td><?=$thesis['id'];?></td>
+								<td><?=$thesis['title'];?></td>
+								<td><?=$thesis['author'];?></td>
 								<td>
-									<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#thesis-modal" data-thesis-id="1" data-thesis-action="edit">Edit</button>
-                    				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#thesis-modal" data-thesis-id="1" data-thesis-action="delete">Delete</button>
+									<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#thesis-modal" data-thesis-id="<?=$thesis['id'];?>" data-thesis-action="edit">Edit</button>
+                    				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#thesis-modal" data-thesis-id="<?=$thesis['id'];?>" data-thesis-action="delete">Delete</button>
 								</td>
 							</tr>
+						<?php endforeach; ?>
 							<tr>
 								<td>2</td>
 								<td>MIS</td>
@@ -87,7 +92,7 @@
 		</div>
 
 		<!-- JavaScript -->
-		<script src="assets/js/jquery-3.2.1.slim.min.js"></script>
+		<script src="assets/js/jquery-3.2.1.min.js"></script>
 		<script src="assets/js/bootstrap.min.js"></script>
 		<script src="assets/js/app.js"></script>
   	</body>

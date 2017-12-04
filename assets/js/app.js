@@ -46,21 +46,96 @@ function addThesis(modal) {
     $(modal).find(thesisForm).css('display', 'block'); // Show Thesis Form from hidden after inserted <see previous line>
     $(modal).find(modalFooter).append(closeThesisModal); // Insert Close button
     $(modal).find(modalFooter).append(addThesisModal); // Insert Add button
+
+    $(modal).find('#add-thesis-modal').click((event) => {
+        let thesisTitle = $.trim($(modal).find('#thesis-title').val());
+        let thesisAuthor = $.trim($(modal).find('#thesis-author').val());
+        let data = {thesisTitle: thesisTitle, thesisAuthor: thesisAuthor};
+        if (thesisTitle !== '' && thesisAuthor !== '') {
+            $.ajax({
+                url: '/insert.php',
+                type: 'post',
+                data: data,
+                success: (response) => {
+                    console.log(response);
+                    if (!$.isEmptyObject(response)) {
+                        let data = JSON.parse(response);
+                        alert('Tehsis ID: ' + data.id + ' added!');
+                    }
+                    
+                    $('#thesis-modal').modal('hide');
+                    window.location = 'index.php';
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    alert('Not saved!');
+                }
+            });
+        } else {
+            let errorMessage = $('<div class="alert alert-danger" role="alert">Please complete fields!</div>');
+            $(modal).find(thesisForm).prepend(errorMessage);
+        }
+    });
 }
 
 function editThesis(modal, thesisId) {
     let thesisIdInput = $(`<div class="form-group">
 						       <label for="id">ID</label>
-							    <input type="text" id="id" class="form-control" value="${thesisId}" disabled="disabled">
+							    <input type="text" id="thesis-id" class="form-control" value="${thesisId}" disabled="disabled">
 						   </div>`);
 
-    $(modal).find(modalTitle).html('Edit Thesis');
-    // call ajax here to get the data of thesisId and insert them to the value of form input    
+    $(modal).find(modalTitle).html('Edit Thesis'); 
     $(modal).find(modalBody).html(thesisFormHidden.clone()); // Insert Thesis Form
     $(modal).find(thesisForm).css('display', 'block'); // Show Thesis Form from hidden after inserted <see previous line>
     $(modal).find(thesisForm).prepend(thesisIdInput);
     $(modal).find(modalFooter).append(closeThesisModal); // Insert Close button
     $(modal).find(modalFooter).append(updateThesisModal); // Insert Update button
+
+    let data = {'thesisId': thesisId};
+    $.ajax({
+        url: '/edit.php',
+        type: 'get',
+        data: data,
+        success: (response) => {
+            if (!$.isEmptyObject(response)) {
+                let data = JSON.parse(response);
+                $(modal).find('#thesis-title').val(data.title);
+                $(modal).find('#thesis-author').val(data.author);
+            } 
+        },
+        error: (jqXHR, textStatus, errorThrown) => {
+            alert('Error!');
+        }
+    });
+
+     $(modal).find('#update-thesis-modal').click((event) => {
+        let thesisTitle = $.trim($(modal).find('#thesis-title').val());
+        let thesisAuthor = $.trim($(modal).find('#thesis-author').val());
+        let data = {thesisId: thesisId, thesisTitle: thesisTitle, thesisAuthor: thesisAuthor};
+        if (thesisTitle !== '' && thesisAuthor !== '') {
+            $.ajax({
+                url: '/update.php',
+                type: 'post',
+                data: data,
+                success: (response) => {
+                    if (!$.isEmptyObject(response)) {
+                        let data = JSON.parse(response);
+                        if (data.rowCount > 0) {
+                            alert('Thesis ID ' + thesisId + ' updated!');
+                        }
+                    }
+                    
+                    $('#thesis-modal').modal('hide');
+                    window.location = 'index.php';
+                },
+                error: (jqXHR, textStatus, errorThrown) => {
+                    alert('Not updated!');
+                }
+            });
+        } else {
+            let errorMessage = $('<div class="alert alert-danger" role="alert">Please complete fields!</div>');
+            $(modal).find(thesisForm).prepend(errorMessage);
+        }
+    });
 }
 
 function deleteThesis(modal, thesisId) {
