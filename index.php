@@ -46,15 +46,6 @@ include_once 'list.php';
 								</td>
 							</tr>
 						<?php endforeach; ?>
-							<tr>
-								<td>2</td>
-								<td>MIS</td>
-								<td>Maria Makiling</td>
-								<td>
-									<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#thesis-modal" data-thesis-id="2" data-thesis-action="edit">Edit</button>
-                    				<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#thesis-modal" data-thesis-id="2" data-thesis-action="delete">Delete</button>
-								</td>
-							</tr>
 						</tbody>
 					</table>
 
