@@ -1,7 +1,7 @@
-#Bootstrap Modal
+# Bootstrap Modal
 Database-driven Boostrap Modal.
 
-#Clone
+# Clone
 To clone:
 ```
 $ git clone https://github.com/julianjupiter/bootstrap-modal.git
@@ -9,10 +9,10 @@ $ git clone https://github.com/julianjupiter/bootstrap-modal.git
 
 Or simple click **Clone or download** button.
 
-#Database
+# Database
 Copy contents of **database.sql**. Execute the commans to you SQL editor or MySQL CLI.
 
-#Run
+# Run
 ```
 $ cd bootstrap-modal
 $ php -S localhost:3000 -t .
