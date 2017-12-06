@@ -1,3 +1,4 @@
+create schema topacdb;
 use topacdb;
 create table if not exists thesis (
 	id int(11) not null auto_increment,
