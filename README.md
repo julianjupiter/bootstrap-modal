@@ -4,7 +4,7 @@ Database-driven Boostrap Modal.
 #Clone
 To clone:
 ```
-$ git clone https://github.com/julianjupiter/bootstrap-modal
+$ git clone https://github.com/julianjupiter/bootstrap-modal.git
 ```
 
 Or simple click **Clone or download** button.
