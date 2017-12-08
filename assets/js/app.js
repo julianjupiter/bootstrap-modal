@@ -27,6 +27,7 @@ $(document).ready(function(){
         $(this).find('.modal-title').html('');
         $(this).find('.modal-body').html('');
         $(this).find('.modal-footer').html('');
+        window.location = 'index.php';
     });
 });
 
@@ -60,17 +61,17 @@ function addThesis(modal) {
                     console.log(response);
                     if (!$.isEmptyObject(response)) {
                         let data = JSON.parse(response);
-                        alert('Tehsis ID: ' + data.id + ' added!');
+                        let message = 'Thesis with ID ' + data.id + ' was added successfully!';
+                        let buttonToRemove = $('button#add-thesis-modal');
+                        confirmationMessage(modal, message, buttonToRemove);
                     }
-                    
-                    $('#thesis-modal').modal('hide');
-                    window.location = 'index.php';
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
-                    alert('Not saved!');
+                    errorMessage(modal);
                 }
             });
         } else {
+            $(modal).find('div.alert-danger').remove();
             let errorMessage = $('<div class="alert alert-danger" role="alert">Please complete fields!</div>');
             $(modal).find(thesisForm).prepend(errorMessage);
         }
@@ -103,7 +104,7 @@ function editThesis(modal, thesisId) {
             } 
         },
         error: (jqXHR, textStatus, errorThrown) => {
-            alert('Error!');
+            errorMessage(modal);
         }
     });
 
@@ -120,15 +121,14 @@ function editThesis(modal, thesisId) {
                     if (!$.isEmptyObject(response)) {
                         let data = JSON.parse(response);
                         if (data.rowCount > 0) {
-                            alert('Thesis ID ' + thesisId + ' updated!');
+                            let message = 'Thesis with ID ' + thesisId + ' was updated successfully!';
+                            let buttonToRemove = $('button#update-thesis-modal');
+                            confirmationMessage(modal, message, buttonToRemove);
                         }
                     }
-                    
-                    $('#thesis-modal').modal('hide');
-                    window.location = 'index.php';
                 },
                 error: (jqXHR, textStatus, errorThrown) => {
-                    alert('Not updated!');
+                    errorMessage(modal);
                 }
             });
         } else {
@@ -144,4 +144,39 @@ function deleteThesis(modal, thesisId) {
     $(modal).find(modalBody).html(content);
     $(modal).find(modalFooter).append(closeThesisModal); // Insert Close button
     $(modal).find(modalFooter).append(deleteThesisModal); // Insert Delete button
+
+    $(modal).find('#delete-thesis-modal').click((event) => {
+        let data = {'thesisId': thesisId};
+        $.ajax({
+            url: '/delete.php',
+            type: 'get',
+            data: data,
+            success: (response) => {
+                if (!$.isEmptyObject(response)) {
+                    let data = JSON.parse(response);
+                    if (data.rowCount > 0) {
+                        let message = 'Thesis with ID ' + thesisId + ' was deleted successfully!';
+                        let buttonToRemove = $('button#delete-thesis-modal');
+                        confirmationMessage(modal, message, buttonToRemove);
+                    }
+                }
+            },
+            error: (jqXHR, textStatus, errorThrown) => {
+                errorMessage(modal);
+            }
+        });
+    });
+}
+
+function confirmationMessage(modal, message, buttonToRemove) {
+    $(modal).find(modalBody).html('');
+    $(modal).find(modalBody).html(message);
+    $(modal).find(buttonToRemove).remove();
+}
+
+function errorMessage(modal) {
+    let error = 'An error occurred. Please try again later!';
+    $(modal).find(modalBody).html('');
+    $(modal).find(modalBody).html(error);
+    $(modal).find('button#update-thesis-modal').remove();
 }
